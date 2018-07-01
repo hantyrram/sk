@@ -3,11 +3,17 @@
 
 const filesystem = require('fs');
 const path = require('path');
+//The encoder that encodes/decodes the data unto a buffer
 const encoder = require('./encoder');
+//Default Storage file to use if none is specified
 const DEFAULT_STORAGE = path.resolve('data/store.bmp');
+//Marks the beginning of the SK Data Structure
 const DEFAULT_MARKER = '<<!--**!>>'
-const DEFAULT_OFFSET = 1024;
+//Start on the 32nd byte of the file
+const DEFAULT_OFFSET = 32;
+//Buffer where the contents of the storage file is loaded into
 var storageBuffer = null;
+//The offset where to write the data(after metadata e.g. Marker,Length Of Data Number)
 var writableOffset = 0; //the secret data's offset ??rename to dataOffset?
 var isReady = false;
 var secret;
@@ -49,8 +55,6 @@ class S{
            secret_max_length = Math.floor((storageBuffer.length - writableOffset) / 4);//??
            self.write("{}");//initialize
            self.commit();
-           
-     
         }else{
            writableOffset = storageBuffer.indexOf(self.marker) + self.marker.length + 4 + 1 + 1;
            //check if there is existing data/secret by reading the length storage
@@ -58,11 +62,8 @@ class S{
            
            if(dataLength > 0){//there is existing data
              //decode it
-
              secret = encoder.decode(storageBuffer,dataLength,writableOffset);
            }
-           
-           
         }
         secret_max_length = Math.floor((storageBuffer.length - writableOffset) / 4);//??divided by 4 when using the twoBitEncoder only
        
@@ -74,9 +75,6 @@ class S{
     console.log(error);
    }
    
-
-   
-
   })().catch((err)=>{
    console.log(err);
   });
@@ -168,7 +166,7 @@ class S{
 // createSnapshot(){}
 
 /**
- * Reads the file and returns the file buffer
+ * Reads the file and returns a Promise which resolves to a content of the File in a Buffer object
  * 
  * @param {String} location of the file
  */
