@@ -1,0 +1,19 @@
+{
+  "name": "secretkeeper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start" : "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "colors": "^1.2.1",
+    "figures": "^2.0.0",
+    "log-symbols": "^2.2.0",
+    "ora": "^2.0.0"
+  }
+}
